@@ -1,0 +1,80 @@
+---
+sidebar: sidebar 
+permalink: concept-cvs-aws.html 
+keywords: cloud volumes service for aws, cloud volumes, cloud volumes service subscription, access key, secret key 
+summary: NetApp Cloud Volumes Service for AWS 是一种云原生文件服务，可通过 NFS 和 SMB 提供具有全闪存性能的 NAS 卷。此服务支持在 AWS 云中运行任何工作负载，包括原有应用程序。 
+---
+= 了解适用于 AWS 的 Cloud Volumes Service
+:hardbreaks:
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+NetApp Cloud Volumes Service for AWS 是一种云原生文件服务，可通过 NFS 和 SMB 提供具有全闪存性能的 NAS 卷。此服务支持在 AWS 云中运行任何工作负载，包括原有应用程序。
+
+
+NOTE: 启动时 link:https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html["适用于 ONTAP 的 Amazon FSX"^]，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 CVS 。但是，如果您之前已将适用于 AWS 的 CVS 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。
+
+
+
+== 使用 Cloud Volumes Service for AWS 的优势
+
+Cloud Volumes Service for AWS 具有以下优势：
+
+* 完全托管服务，因此无需配置或管理存储设备
+* 支持 NFSv3 和 NFSv4.1 以及 SMB 3.0 和 3.1.1 NAS 协议
+* 安全访问 Linux 和 Windows 弹性容器服务（ Elastic Container Service ， ECS ）实例，并提供以下支持：
++
+** Amazon Linux 2 ， Red Hat Enterprise Linux 7.5 ， SLES 12 SP3 和 Ubuntu 16.04 LTS
+** Windows Server 2008 R2 ， Windows Server 2012 R2 和 Windows Server 2016
+
+
+* 可选择捆绑定价和按需购买定价
+
+
+
+
+== 成本
+
+Cloud Volumes Service for AWS 创建的卷会根据您的服务订阅付费，而不是通过 Cloud Manager 付费。
+
+从 Cloud Manager 发现适用于 AWS 的 Cloud Volumes Service 区域或卷不收取任何费用。
+
+
+
+== 快速入门
+
+按照以下步骤快速入门，或者转到下一部分了解完整详细信息。
+
+[role="quick-margin-para"]
+您必须已为 Cloud Volumes Service 设置 AWS 并订阅其中一个 https://aws.amazon.com/marketplace/search/results?x=0&y=0&searchTerms=netapp+cloud+volumes+service["AWS 市场上的 NetApp Cloud Volumes Service 产品"^] 并在 Cloud Manager 中配置了一个适用于 AWS 的现有 CVS 工作环境，用于创建和管理卷。
+
+[role="quick-margin-para"]
+使用适用于 AWS 的现有 CVS 工作环境，您可以使用 Cloud Manager 为现有 CVS for AWS 订阅创建，挂载和管理云卷。
+
+
+
+== 获取帮助
+
+有关一般服务问题，请使用 Cloud Manager 聊天工具。
+
+对于与云卷相关的技术支持问题，请使用 Cloud Volumes Service 用户界面的 " 支持 " 选项卡中的 20 位 "930" 序列号。打开 Web 服务单或致电支持部门时，请使用此支持 ID 。请务必从 Cloud Volumes Service 用户界面激活 Cloud Volumes Service 序列号以获得支持。 https://docs.netapp.com/us-en/cloud_volumes/aws/task_activating_support_entitlement.html["此处将介绍这些步骤"^]。
+
+
+
+== 限制
+
+* 使用 Cloud Volumes Service 卷时， Cloud Manager 不支持在工作环境之间进行数据复制。
+* 不支持从 Cloud Manager 中删除 Cloud Volumes Service for AWS 订阅。您只能通过 Cloud Volumes Service for AWS 界面执行此操作。
+
+
+
+
+== 相关链接
+
+* https://cloud.netapp.com/cloud-volumes-service-for-aws["NetApp Cloud Central ：适用于 AWS 的 Cloud Volumes Service"^]
+* https://docs.netapp.com/us-en/cloud_volumes/aws/["NetApp Cloud Volumes Service for AWS 文档"^]
+

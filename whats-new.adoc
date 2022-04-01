@@ -1,0 +1,26 @@
+---
+sidebar: sidebar 
+permalink: whats-new.html 
+keywords: 'what"s new, features, new, release notes, bugs, limitations, known issues, enhancements, fixes' 
+summary: 了解 Cloud Volumes Service for AWS 中的新增功能。 
+---
+= Cloud Volumes Service for AWS 的新增功能
+:hardbreaks:
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+了解 Cloud Volumes Service for AWS 中的新增功能。
+
+
+
+== 2021 年 9 月 2 日
+
+
+
+=== 无法为 AWS 工作环境创建新的 CVS 。
+
+启动时 link:https://docs.netapp.com/us-en/cloud-manager-fsx-ontap/concept-fsx-aws.html["适用于 ONTAP 的 Amazon FSX"]，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 CVS 。但是，如果您之前已将适用于 AWS 的 CVS 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。

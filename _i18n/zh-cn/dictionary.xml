@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blocks>
+  <block id="5b618ec153a442d925e7e3cc93bb65d8" category="summary">如果您将 Windows Active Directory （ AD ）服务器与云卷结合使用，则应熟悉 AWS 安全组设置指南。通过这些设置，云卷可以与 AD 正确集成。</block>
+  <block id="b79db32b660a9bbc01887de0acbc4f26" category="doc">适用于 Windows AD 服务器的 AWS 安全组设置</block>
+  <block id="c546611c5f302cd6f19dc2dba0bcf1b0" category="paragraph">默认情况下，应用于 EC2 Windows 实例的 AWS 安全组不包含除 RDP 之外的任何协议的入站规则。您必须向附加到每个 Windows AD 实例的安全组添加规则，才能从 Cloud Volumes Service 启用入站通信。所需端口如下：</block>
+  <block id="c2ba7e785c49050f48da9aacc45c2b85" category="cell">服务</block>
+  <block id="60aaf44d4b562252c04db7f98497e9aa" category="cell">Port</block>
+  <block id="888a77f5ac0748b6c8001822417df8b6" category="cell">协议</block>
+  <block id="5ca2a54c1065dd7d05391f89a278ad2a" category="cell">AD Web 服务</block>
+  <block id="2747e3c644b9a085cd4d3a7718b16024" category="cell">9389</block>
+  <block id="b136ef5f6a01d816991fe3cf7a6ac763" category="cell">TCP</block>
+  <block id="ed5f2bdecbd4bd349d09412d1ff6a6fb" category="cell">DNS</block>
+  <block id="d82c8d1619ad8176d665453cfb2e55f0" category="cell">53.</block>
+  <block id="f5ef036b4d8b630721e51fe23489fbc9" category="cell">UDP</block>
+  <block id="5985e830fae65f37a46ae22075a4ca48" category="cell">ICMPv4</block>
+  <block id="382b0f5185773fa0f67a8ed8056c7759" category="cell">不适用</block>
+  <block id="e0b221d2923b98ecd9ef35504d787365" category="cell">回显回复</block>
+  <block id="87b3695bfd6f672e2c7c4da7ca2b46a8" category="cell">Kerberos</block>
+  <block id="f1b6f2857fb6d44dd73c7041e0aa0f19" category="cell">464.</block>
+  <block id="2a38a4a9316c49e5a833517c45d31070" category="cell">88</block>
+  <block id="2363dee608bcd9f6ce7f980bfdad5789" category="cell">LDAP</block>
+  <block id="c86a7ee3d8ef0b551ed58e354a836f2b" category="cell">389.</block>
+  <block id="a4d92e2cd541fca87e4620aba658316d" category="cell">3268</block>
+  <block id="b19cdd862134a63196f20f8257d2834a" category="cell">NetBIOS 名称</block>
+  <block id="013d407166ec4fa56eb1e1f8cbe183b9" category="cell">138.</block>
+  <block id="56440062188d73f60d350ea349366299" category="cell">SAM/LSA</block>
+  <block id="67f7fb873eaf29526a11a9b7ac33bfac" category="cell">445</block>
+  <block id="3f0dca2433e91d5f3ab7109c68143794" category="cell">安全 LDAP</block>
+  <block id="c5ab0bc60ac7929182aadd08703f1ec6" category="cell">636</block>
+  <block id="c91e3483cf4f90057d02aa492d2b25b1" category="cell">3369</block>
+  <block id="010b192f04e8eee11d74c4802cc24093" category="cell">w32 时间</block>
+  <block id="202cb962ac59075b964b07152d234b70" category="cell">123.</block>
+  <block id="6d0cda859aaf15ba029d2fa7848c128f" category="paragraph">如果您要在 AWS EC2 实例上部署和管理 AD 安装域控制器和成员服务器，则需要多个安全组规则才能允许 Cloud Volumes Service 的流量。以下示例说明了如何在 AWS CloudFormation 模板中为 AD 应用程序实施这些规则。</block>
+  <block id="5876c30cdb96c38d4cc2497feffde111" category="summary">您可以为每个卷创建一个快照策略，以便可以从较早的时间恢复或还原卷的整个内容。您还可以根据需要为云卷创建按需快照。</block>
+  <block id="bf7d38473ac37a5a084d9d1f21a4002c" category="doc">管理云卷快照</block>
+  <block id="2530ad97c013f5d8d9c69004a4e7ee67" category="section-title">创建按需快照</block>
+  <block id="377828daafe235f0aafbc80626a92a44" category="paragraph">如果要创建具有当前卷状态的快照，可以为云卷创建按需快照。</block>
+  <block id="f3a29486bed19a90f2da6d007818b427" category="list-title">步骤</block>
+  <block id="6c970f68c7cf5a446d127ac3ab6d72f7" category="list-text">打开工作环境。</block>
+  <block id="bb06f880c297b34268ea12d1602837bb" category="list-text">将鼠标悬停在卷上，然后单击 * 创建快照副本 * 。</block>
+  <block id="f6abfc5070e6bcda72d651ecad906489" category="list-text">输入快照的名称或使用自动生成的名称，然后单击 * 创建 * 。</block>
+  <block id="2209a54e85463699d44111ce0c0a236a" category="inline-image-macro">选择要还原到新卷的快照副本的屏幕截图</block>
+  <block id="f989d58bb69770d84593492ff494f094" category="paragraph"><block ref="f989d58bb69770d84593492ff494f094" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="e5424232e5c3cbc0b77accf10fc38470" category="section-title">创建或修改快照策略</block>
+  <block id="4fec62b4aa71f93e589147ab337d3a3a" category="paragraph">您可以根据需要为云卷创建或修改快照策略。您可以在创建卷或编辑卷时从 _Snapshot Policy_ 选项卡定义快照策略。</block>
+  <block id="e7869c8f9e6db9876598b0ae71814661" category="list-text">将鼠标悬停在卷上，然后单击 * 编辑 * 。</block>
+  <block id="13936fb1e8cab81aa5c50bc2a7991029" category="list-text">从 _Snapshot Policy_ 选项卡中，将启用快照滑块移至右侧。</block>
+  <block id="6fcb64b90c6b69153987bd2a5934500e" category="list-text">定义快照计划：</block>
+  <block id="0c8182bf573f25aa41ea1b97ef990daf" category="list-text">选择频率： * 每小时 * ， * 每日 * ， * 每周 * 或 * 每月 *</block>
+  <block id="95f0f96e7a13d18ec4b4cc683cac354a" category="list-text">选择要保留的快照数量。</block>
+  <block id="d83574476baea70ecfe273fcb08a92b1" category="list-text">选择应创建快照的日期，小时和分钟。</block>
+  <block id="23643dc2c2630e1cd190257bc60fe38e" category="inline-image-macro">已配置 Snapshot 策略的屏幕截图</block>
+  <block id="a88d31c8b3d36cada7ac3f645dbdd24b" category="paragraph"><block ref="a88d31c8b3d36cada7ac3f645dbdd24b" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="559ab4c9d098436cfbf33391cfeecf7f" category="list-text">单击 * 添加卷 * 或 * 更新卷 * 以保存策略设置。</block>
+  <block id="c97414d9e21703e37b875d9f1d8dfb74" category="section-title">禁用快照策略</block>
+  <block id="f2dd955514c60fad76437ba0f7550a7f" category="paragraph">您可以禁用快照策略，以便在保留快照策略设置的同时，在短时间内停止创建快照。</block>
+  <block id="7a732251673ef876881925c7f8facaa0" category="list-text">从 _Snapshot Policy_ 选项卡中，将启用快照滑块移至左侧。</block>
+  <block id="39e4d7ad6415acefc633ce23184ef5d5" category="inline-image-macro">处于禁用位置的 Snapshot 策略按钮的屏幕截图</block>
+  <block id="bcbed048badd671015bc9a700a9ee184" category="paragraph"><block ref="bcbed048badd671015bc9a700a9ee184" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="fc220eb1d5572bf36eac03104db8fd04" category="list-text">单击 * 更新卷 * 。</block>
+  <block id="0932c32fdddde924b270a62a2ae2cd0e" category="paragraph">要重新启用快照策略，请将启用快照滑块移至右侧，然后单击 * 更新卷 * 。</block>
+  <block id="efb44cfe1d5b8d9954ea045385675c66" category="section-title">删除快照</block>
+  <block id="29ff8f51ba92d1665f7d969f23531c0e" category="paragraph">您可以从卷页面中删除快照。</block>
+  <block id="7552d0e963760ace00d752fb123989a3" category="list-text">将鼠标悬停在卷上，然后单击 * 删除 Snapshot 副本 * 。</block>
+  <block id="b8d7a446f6dbe49089b4c415dc2e8037" category="list-text">从下拉列表中选择快照，然后单击 * 删除 * 。</block>
+  <block id="9c673ecd9d0dddf896cc55f2127056d8" category="inline-image-macro">选择要删除的快照副本的屏幕截图</block>
+  <block id="41a98f64ec73ced976239a7861d67e1c" category="paragraph"><block ref="41a98f64ec73ced976239a7861d67e1c" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="e1899e67aa8aec45bef5dc600fc2ae14" category="list-text">在确认对话框中，单击 * 删除 * 。</block>
+  <block id="f7fd570b54090ae0f43a226147fae194" category="section-title">从快照还原卷</block>
+  <block id="b84d400414400c87a14ad22cf930e8a0" category="paragraph">您可以将卷从现有快照还原到较早的时间点。</block>
+  <block id="722fda043af9bcf84505c8529d00eefe" category="paragraph">还原卷时，快照的内容会覆盖现有卷配置。创建快照后对卷中数据所做的任何更改都将丢失。</block>
+  <block id="5e69623e5ef5b2074e9208bfd305062a" category="paragraph">请注意，在执行还原操作后，客户端不需要重新挂载卷。</block>
+  <block id="430f869f4a80b187c9fcd338d669738d" category="list-text">将鼠标悬停在卷上，然后单击 * 将卷还原到 Snapshot* 。</block>
+  <block id="14f4ef9542ad6c9c0a9a81b85223c52f" category="list-text">从下拉列表中选择要用于还原现有卷的快照，然后单击 * 还原 * 。</block>
+  <block id="30ff16b884c49625bf44c57000849c05" category="inline-image-macro">选择用于覆盖现有卷的快照副本的屏幕截图</block>
+  <block id="69c870ef5a9fde9a9c627d8c46f1737a" category="paragraph"><block ref="69c870ef5a9fde9a9c627d8c46f1737a" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="a696ff8c895f6eed266509c3ab2452a9" category="summary">了解 Cloud Volumes Service for AWS 中的新增功能。</block>
+  <block id="780371a55c5f8fb4b8ad9c591f1ca785" category="doc">Cloud Volumes Service for AWS 的新增功能</block>
+  <block id="3b7a1a77cdd08778e0827fbf312442b7" category="section-title">2021 年 9 月 2 日</block>
+  <block id="b8a465f604dc28087d04a8998f16d610" category="section-title">无法为 AWS 工作环境创建新的 CVS 。</block>
+  <block id="18cf072964a583150dd247485ba75b92" category="inline-link-macro">适用于 ONTAP 的 Amazon FSX</block>
+  <block id="2fe1ae66d2802d30c5480c17cf6781f4" category="paragraph">启动时 <block ref="f5299bffecc7e118b61541de961fc5aa" category="inline-link-macro-rx"></block>，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 CVS 。但是，如果您之前已将适用于 AWS 的 CVS 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。</block>
+  <block id="ce21e7ae4271271294ccbf54c8fd6864" category="summary">NetApp 通过多种方式为 Cloud Manager 提供支持。全天候提供丰富的免费自助支持选项，例如知识库（ KB ）文章和社区论坛。您的支持注册包括通过 Web 服务单提供的远程技术支持。</block>
+  <block id="fabfc25ef8996fd90836e58a4c0b26b6" category="doc">获取帮助</block>
+  <block id="d41d8cd98f00b204e9800998ecf8427e" category="inline-link-macro"></block>
+  <block id="7ccaf84febc0ed633fbdbadb8d488a7e" category="paragraph"><block ref="7ccaf84febc0ed633fbdbadb8d488a7e" category="inline-link-macro-rx"></block></block>
+  <block id="30d965eef5ba25c6b9998ae38270b43e" category="doc">法律声明</block>
+  <block id="c59ae8d7beeb519a23478ab048af482c" category="paragraph"><block ref="c59ae8d7beeb519a23478ab048af482c" category="inline-link-macro-rx"></block></block>
+  <block id="6f2ac1cf1da8ec34232c651d4bba0149" category="paragraph"><block ref="6f2ac1cf1da8ec34232c651d4bba0149" category="inline-link-macro-rx"></block></block>
+  <block id="4940124e8487cb4ea36f1511a195cf66" category="inline-link-macro">有关 Cloud Manager 3.9 的注意事项</block>
+  <block id="c069fcc68c5dfa73ccc99924c836cae9" category="list-text"><block ref="c069fcc68c5dfa73ccc99924c836cae9" category="inline-link-macro-rx"></block></block>
+  <block id="cffa933a10458e8374fbef2e21507c9d" category="summary">NetApp Cloud Volumes Service for AWS 是一种云原生文件服务，可通过 NFS 和 SMB 提供具有全闪存性能的 NAS 卷。此服务支持在 AWS 云中运行任何工作负载，包括原有应用程序。</block>
+  <block id="6681a3ff8cf8540f05355c680f9f8fd5" category="doc">了解适用于 AWS 的 Cloud Volumes Service</block>
+  <block id="b189c3042df39130a4d9b1bd794fe3d3" category="admonition">启动时 <block ref="96821e1e659978c978732a5dc24298ac" category="inline-link-macro-rx"></block>，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 CVS 。但是，如果您之前已将适用于 AWS 的 CVS 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。</block>
+  <block id="2756711ac396119b969ba6b553ad278e" category="section-title">使用 Cloud Volumes Service for AWS 的优势</block>
+  <block id="55208bdbb7b4fa51eb7ae63a26d71791" category="paragraph">Cloud Volumes Service for AWS 具有以下优势：</block>
+  <block id="ece95ef94c2dfbf3d6cac29bd306038d" category="list-text">完全托管服务，因此无需配置或管理存储设备</block>
+  <block id="51d18a4be065ddd160b5f764d2f9c9f1" category="list-text">支持 NFSv3 和 NFSv4.1 以及 SMB 3.0 和 3.1.1 NAS 协议</block>
+  <block id="cdcd5a58d731470edacf43406346e5d2" category="list-text">安全访问 Linux 和 Windows 弹性容器服务（ Elastic Container Service ， ECS ）实例，并提供以下支持：</block>
+  <block id="2d284a6be9a90f9d7d98ef4f9543b6b1" category="list-text">Amazon Linux 2 ， Red Hat Enterprise Linux 7.5 ， SLES 12 SP3 和 Ubuntu 16.04 LTS</block>
+  <block id="b5ef382c617bf480eb64c50a38e3cbfa" category="list-text">Windows Server 2008 R2 ， Windows Server 2012 R2 和 Windows Server 2016</block>
+  <block id="17dfcb3ae68171678fbe713c5cfb13eb" category="list-text">可选择捆绑定价和按需购买定价</block>
+  <block id="20b4f77bd00b4f63a49ec8e08f3bf6a6" category="section-title">成本</block>
+  <block id="104228240e70278189bddacdbbc6bfcb" category="paragraph">Cloud Volumes Service for AWS 创建的卷会根据您的服务订阅付费，而不是通过 Cloud Manager 付费。</block>
+  <block id="1e46341a32be0db14365fa0678e52994" category="paragraph">从 Cloud Manager 发现适用于 AWS 的 Cloud Volumes Service 区域或卷不收取任何费用。</block>
+  <block id="06ad314b340900d226b1196e1fe289e9" category="section-title">快速入门</block>
+  <block id="a024d4a2919f7ce59bdfa73cf09cf70c" category="paragraph">按照以下步骤快速入门，或者转到下一部分了解完整详细信息。</block>
+  <block id="e0e199a1997e22c4b14470829cfbc921" category="inline-link">AWS 市场上的 NetApp Cloud Volumes Service 产品</block>
+  <block id="6405b781e67febba3d97a91c9387ca67" category="paragraph">您必须已为 Cloud Volumes Service 设置 AWS 并订阅其中一个<block ref="b4e3d74af85b05fca693589abeec4d57" category="inline-link-rx"></block> 并在 Cloud Manager 中配置了一个适用于 AWS 的现有 CVS 工作环境，用于创建和管理卷。</block>
+  <block id="b2eb52e3cacaab82a3031ca88465f076" category="paragraph">使用适用于 AWS 的现有 CVS 工作环境，您可以使用 Cloud Manager 为现有 CVS for AWS 订阅创建，挂载和管理云卷。</block>
+  <block id="20c404f3ca0633629eee9b1b4ccd6737" category="section-title">获取帮助</block>
+  <block id="17bcf93007944955856f301d4559f3f8" category="paragraph">有关一般服务问题，请使用 Cloud Manager 聊天工具。</block>
+  <block id="5165f8dcc441652561153c961b6647c1" category="inline-link">此处将介绍这些步骤</block>
+  <block id="e09ee34cc358ad27bcd0168a326a4e1d" category="paragraph">对于与云卷相关的技术支持问题，请使用 Cloud Volumes Service 用户界面的 " 支持 " 选项卡中的 20 位 "930" 序列号。打开 Web 服务单或致电支持部门时，请使用此支持 ID 。请务必从 Cloud Volumes Service 用户界面激活 Cloud Volumes Service 序列号以获得支持。<block ref="b121ed8af2c0df81e933acf49e134b07" category="inline-link-rx"></block>。</block>
+  <block id="e646e16bee8b32e6ea29e30d01970a6c" category="section-title">限制</block>
+  <block id="5d6f7db60ba9fde2bec8c13475de092b" category="list-text">使用 Cloud Volumes Service 卷时， Cloud Manager 不支持在工作环境之间进行数据复制。</block>
+  <block id="873edff19042f99332d25fb9961f92ec" category="list-text">不支持从 Cloud Manager 中删除 Cloud Volumes Service for AWS 订阅。您只能通过 Cloud Volumes Service for AWS 界面执行此操作。</block>
+  <block id="f6bd0d7447ff66cc6b859603a88fbde9" category="section-title">相关链接</block>
+  <block id="66f7031c811c9cae94f699422c10896e" category="inline-link">NetApp Cloud Central ：适用于 AWS 的 Cloud Volumes Service</block>
+  <block id="a25d65d2477203b797bf4e8d044a3ec0" category="list-text"><block ref="a25d65d2477203b797bf4e8d044a3ec0" category="inline-link-rx"></block></block>
+  <block id="a56dd8ec8161b0604a81c32a36cb8a74" category="inline-link">NetApp Cloud Volumes Service for AWS 文档</block>
+  <block id="c9075ccc4ec7bc51de5587ffae0e2f7a" category="list-text"><block ref="c9075ccc4ec7bc51de5587ffae0e2f7a" category="inline-link-rx"></block></block>
+  <block id="69429a5a6bcb2b32136f0bf4a79f36be" category="summary">您可以通过 Cloud Manager 根据 Cloud Volumes Service for AWS 订阅创建云卷。您还可以通过 Cloud Volumes Service 界面发现已创建的云卷，并将其添加到工作环境中。</block>
+  <block id="d58f64c80e1d63d57d2b7b686600df2f" category="doc">管理适用于 AWS 的 Cloud Volumes Service</block>
+  <block id="06021ba1ee96f1a3a57b50001fc7244c" category="inline-link">适用于 AWS 的 Cloud Volumes Service</block>
+  <block id="70374cbb6516877acdc938f75e5b016a" category="paragraph">您可以通过 Cloud Manager 基于创建云卷<block ref="2b79d0cac1b85facde7d3ecc5311b222" category="inline-link-rx"></block> 订阅。您还可以通过 Cloud Volumes Service 界面发现已创建的云卷，并将其添加到工作环境中。</block>
+  <block id="7d7750669a7abd14bba890c8f84c37d8" category="section-title">创建云卷</block>
+  <block id="354bf896af3e95a882da0c34f21f4ec6" category="paragraph">对于已在 Cloud Volumes Service 工作环境中存在卷的配置，您可以使用以下步骤添加新卷。</block>
+  <block id="5b542035bc34f8098b2ed2f93e52363b" category="paragraph">对于不存在卷的配置，您可以在设置 Cloud Volumes Service for AWS 订阅后直接从 Cloud Manager 创建第一个卷。过去，必须直接在 Cloud Volumes Service 用户界面中创建第一个卷。</block>
+  <block id="135b308ed83c53f1516b7c754566d1c4" category="list-title">开始之前</block>
+  <block id="b544187fd0ebc7855a54e1264241a163" category="list-text">如果要在 AWS 中使用 SMB 、则必须设置 DNS 和 Active Directory 。</block>
+  <block id="f153caba90fc4134024f9b4c3eeadea8" category="list-text">在计划创建 SMB 卷时，您必须具有可连接到的 Windows Active Directory 服务器。您将在创建卷时输入此信息。此外，请确保管理员用户能够在指定的组织单位（ OU ）路径中创建计算机帐户。</block>
+  <block id="f3b88c561fc590a5f78d049cc89329b5" category="list-text">在新的区域 / 工作环境中创建第一个卷时，需要以下信息：</block>
+  <block id="a4f2df035c13c58cc376869dbee0ee14" category="inline-link-macro">AWS 主题</block>
+  <block id="642d2cda7977cf264b1298d41df86786" category="list-text">AWS 帐户 ID ：一个 12 位数的 Amazon 帐户标识符，不带短划线。要查找您的帐户 ID ，请参见此部分 <block ref="c480412414908501543cf38478b1179b" category="inline-link-macro-rx"></block>。</block>
+  <block id="271583576fc127e2f9b56e836a8d1754" category="list-text">无类域间路由（ CIDR ）块：未使用的 IPv4 CIDR 块。网络前缀必须介于 /16 和 /28 之间，并且还必须位于为专用网络预留的范围内（ RFC 1918 ）。请勿选择与您的 VPC CIDR 分配重叠的网络。</block>
+  <block id="b00c2d91d7605a170171b54e68314bd6" category="list-text">选择适用于 AWS 工作环境的 CVS ，然后单击 * 添加新卷 * 。</block>
+  <block id="091ba3be5b79b98a60f70b0ddcbca994" category="inline-image-macro">Cloud Volumes Service for AWS 在 " 工作环境 " 页面上的屏幕截图。</block>
+  <block id="0722a286bdc136284c5c42d6024a3898" category="paragraph"><block ref="0722a286bdc136284c5c42d6024a3898" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d90ed71b0c87a5ac1242bfb18b8ec98e" category="list-text">如果要将第一个卷添加到该区域的工作环境中，则必须添加 AWS 网络信息。</block>
+  <block id="816acfd475c8602415d50d57042604a8" category="list-text">输入区域的 IPv4 范围（ CIDR ）。</block>
+  <block id="c19644df0fd63d9b566fdfc46fc5b91f" category="list-text">输入 12 位 AWS 帐户 ID （不带短划线），将 Cloud Volumes 帐户连接到 AWS 帐户。</block>
+  <block id="26983a904e0717c520032a2178795368" category="list-text">单击 * 继续 * 。</block>
+  <block id="e1725354b178ee163aab5ff88ba79962" category="inline-image-macro">添加 CIDR 和 AWS 帐户 ID 的网络设置页面的屏幕截图</block>
+  <block id="ae5d1f05cf02d95e15fb95c5f6512127" category="paragraph"><block ref="ae5d1f05cf02d95e15fb95c5f6512127" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="e140b2c22b8d0139d834ebab18001419" category="list-text">" 接受虚拟接口 " 页面介绍了在添加卷之后需要执行的一些步骤，以便您可以完成该步骤。只需再次单击 * 继续 * 即可。</block>
+  <block id="e3bd191f723fb22c2a0f732bd873a29e" category="list-text">在详细信息和标记页面中，输入有关卷的详细信息：</block>
+  <block id="0dcbdc7a88267f1af3dfbb016b0e988b" category="list-text">输入卷的名称。</block>
+  <block id="c6dee54a480ba6da3ed5355d644290bf" category="list-text">指定一个介于 100 GiB 到 90 ， 000 GiB 范围内的大小（相当于 88 TiB ）。</block>
+  <block id="18f39858c9507476f461154189c305ce" category="inline-link-macro">了解有关已分配容量的更多信息</block>
+  <block id="67a490b1b440aa4a195bc0b1c2eac66b" category="paragraph"><block ref="740ab61298b2f48927f56d106e976b75" category="inline-link-macro-rx"></block>。</block>
+  <block id="d5d2b1f89ce09d0f5810f56209020adc" category="list-text">指定服务级别：标准，高级或极速。</block>
+  <block id="4de85cc4f312ff19184ba3b85367874c" category="inline-link-macro">了解有关服务级别的更多信息</block>
+  <block id="027ac71ad5ba9cea394371c445184e1a" category="paragraph"><block ref="facfe9652e3265a1bd370408a43c9e56" category="inline-link-macro-rx"></block>。</block>
+  <block id="b52dd7faab517a99be6bfdbd350e2024" category="list-text">根据需要输入一个或多个标记名称以对卷进行分类。</block>
+  <block id="e779fbfdff90085c8a49c2e711c97ce8" category="inline-image-macro">卷详细信息页面的屏幕截图，您可以在其中提供名称，大小和服务级别</block>
+  <block id="0c9dac5fa8cb7db5aa581a972bfd9bcc" category="paragraph"><block ref="0c9dac5fa8cb7db5aa581a972bfd9bcc" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="61626590a57bc8cc5a3923e8f5d7457a" category="list-text">在协议页面中，选择 NFS ， SMB 或双协议，然后定义详细信息。NFS 和 SMB 所需的条目将在下面的不同部分中显示。</block>
+  <block id="d21a4fe6a8f6a1dfa8736389d4c3476d" category="list-text">在卷路径字段中，指定挂载卷时将看到的卷导出的名称。</block>
+  <block id="d4032e7bc32cf7c7c802e2edd20ae7df" category="list-text">如果选择双协议，则可以通过选择 NTFS 或 UNIX 来选择安全模式。安全模式会影响所使用的文件权限类型以及如何修改权限。</block>
+  <block id="35c7690cdd2979341dcfe1409203a6f8" category="list-text">UNIX 使用 NFSv3 模式位，只有 NFS 客户端可以修改权限。</block>
+  <block id="74851bf5ac7ba83cb1934d5c1c768a00" category="list-text">NTFS 使用 NTFS ACL ，只有 SMB 客户端可以修改权限。</block>
+  <block id="547a5c5cf72eabae707b477139de2cdd" category="list-text">对于 NFS ：</block>
+  <block id="972cad9fed78d5458afb433abba75a35" category="list-text">在 NFS 版本字段中，根据您的要求选择 NFSv3 和 / 或 NFSv4.1 。</block>
+  <block id="971b53e8e70edb4bd2dc46c1e9a5f83b" category="list-text">或者，您也可以创建导出策略来确定可以访问卷的客户端。指定：</block>
+  <block id="264754e31d1ff52cdc5aaf133afec15f" category="list-text">使用 IP 地址或无类别域间路由（ CIDR ）允许的客户端。</block>
+  <block id="afbfc1582fb1f428d3810c815dfcc309" category="list-text">访问权限为 " 读写 " 或 " 只读 " 。</block>
+  <block id="4ab55a4fa374ed23333000e2528f27ae" category="list-text">用户使用的访问协议（如果卷同时允许 NFSv3 和 NFSv4.1 访问，则为协议）。</block>
+  <block id="c2e80b269feea5b55611a060d02af36b" category="list-text">如果要定义其他导出策略规则，请单击 * + 添加导出策略规则 * 。</block>
+  <block id="7f705955c40fe9715fd0b0beafc53e4d" category="paragraph">下图显示了已填写 NFS 协议的卷页面：</block>
+  <block id="7d060f160067a6298515896b28afec14" category="inline-image-macro">一个屏幕截图，显示为 NFS Cloud Volumes Service 卷填写的卷页面。</block>
+  <block id="85096d1e03ed2996040c406e3e1d8b41" category="paragraph"><block ref="85096d1e03ed2996040c406e3e1d8b41" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="9558b14c9d59086685b161678bbd5ba3" category="list-text">对于 SMB ：</block>
+  <block id="1ba239f53f2db3437185f2534e416469" category="list-text">您可以通过选中 SMB 协议加密复选框来启用 SMB 会话加密。</block>
+  <block id="a2c22edd5896ae686d3e4df9af7f0cb1" category="list-text">您可以通过填写 Active Directory 部分中的字段将卷与现有 Windows Active Directory 服务器集成：</block>
+  <block id="6f16a5f8ff5d75ab84c018adacdfcbb7" category="cell">字段</block>
+  <block id="b5a7adde1af5c87d7fd797b6245c2a39" category="cell">Description</block>
+  <block id="9d35762d6cb446294ba4226fba0d1eb5" category="cell">DNS 主 IP 地址</block>
+  <block id="af76d053440af0abdccb0ad361f41e55" category="cell">为 SMB 服务器提供名称解析的 DNS 服务器的 IP 地址。引用多个服务器时，请使用逗号分隔 IP 地址，例如 172.31.25.223 ， 172.31.2.74 。</block>
+  <block id="b4a5aaff47ac1aad0a039f0089aac0c6" category="cell">要加入的 Active Directory 域</block>
+  <block id="c6574c421a99f2abfa9f469aee34e011" category="cell">您希望 SMB 服务器加入的 Active Directory （ AD ）域的 FQDN 。使用 AWS Managed Microsoft AD 时，请使用 "Directory DNS name" 字段中的值。</block>
+  <block id="bb78cf486f48b949ec20d57c3b4b3570" category="cell">SMB 服务器 NetBIOS 名称</block>
+  <block id="5edfee54ded2748effdab7c474ec6077" category="cell">要创建的 SMB 服务器的 NetBIOS 名称。</block>
+  <block id="a3bbc956ff81e28dd77efaaf4d1c5b30" category="cell">授权加入域的凭据</block>
+  <block id="03fa572f48ef7f33b022f609e0553e85" category="cell">具有足够权限将计算机添加到 AD 域中指定组织单位 (OU) 的 Windows 帐户的名称和密码。</block>
+  <block id="ff309cf3107765153856990e03224d8c" category="cell">组织单位</block>
+  <block id="5093dda171493c439ff0fd797361cdab" category="cell">AD 域中要与 SMB 服务器关联的组织单元。默认值为 CN=Computers ，用于连接到您自己的 Windows Active Directory 服务器。如果将 AWS 托管 Microsoft AD 配置为 Cloud Volumes Service 的 AD 服务器，则应在此字段中输入 * OU=Computers ， OU=corp* 。</block>
+  <block id="03e6e06b082c189fc87ad9aad3901032" category="paragraph">下图显示了已填写 SMB 协议的卷页面：</block>
+  <block id="a69750d79ae32373cb26af4d76eee484" category="inline-image-macro">一个屏幕截图，显示为 SMB Cloud Volumes Service 卷填写的卷页面。</block>
+  <block id="396a17f0ed51b9c5c6e2c2d382b9da29" category="paragraph"><block ref="396a17f0ed51b9c5c6e2c2d382b9da29" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="0a57876be28d49580413d1a2558772fb" category="admonition">您应按照 AWS 安全组设置指南进行操作，以使云卷能够正确地与 Windows Active Directory 服务器集成。请参见 <block ref="f4ec2b2ad22b30798c401e715e4b45d6" category="inline-link-macro-rx"></block> 有关详细信息 ...</block>
+  <block id="7bbdd974c5a4fcc356dc43411e4ac14a" category="list-text">在 "Volume from Snapshot" 页面中，如果要基于现有卷的快照创建此卷，请从 "Snapshot Name" 下拉列表中选择此快照。</block>
+  <block id="b51303a39ac56093d1845ac205322ee3" category="list-text">在 "Snapshot 策略 " 页面中，您可以启用 Cloud Volumes Service 以根据计划为卷创建 Snapshot 副本。您可以现在执行此操作，也可以稍后编辑卷以定义快照策略。</block>
+  <block id="ba33208e705836c12b7e1e6e2fa6b492" category="inline-link-macro">创建快照策略</block>
+  <block id="24655d5d01f8bd5ddfdadc9856177691" category="paragraph">请参见 <block ref="3e19941e2c727b2290f96f83089e313b" category="inline-link-macro-rx"></block> 有关快照功能的详细信息。</block>
+  <block id="5e65e2e51d0d291499a42f54730e645c" category="list-text">单击 * 添加卷 * 。</block>
+  <block id="45dbe3c136df615d693b80183c277a3b" category="paragraph">此时，新卷将添加到工作环境中。</block>
+  <block id="539f38c23d6929f35c3331d13ab3c4bd" category="inline-link">《 NetApp Cloud Volumes Service for AWS 帐户设置指南》</block>
+  <block id="e88b859af73fdb6d9513646b0f296904" category="paragraph">如果这是在此 AWS 订阅中创建的第一个卷，则需要启动 AWS 管理控制台以接受此 AWS 区域将使用的两个虚拟接口来连接所有云卷。请参见<block ref="e5f75cea5d203da104ca9bf283e951b9" category="inline-link-rx"></block> 了解详细信息。</block>
+  <block id="39a7008bb5d3e1b3ff14fbe14ca2e592" category="paragraph">单击 * 添加卷 * 按钮后，您必须在 10 分钟内接受这些接口，否则系统可能会超时。如果发生这种情况，请发送电子邮件至 cvs-support@netapp.com ，并附上您的 AWS 客户 ID 和 NetApp 序列号。支持部门将修复问题描述，您可以重新启动入职流程。</block>
+  <block id="ff74d9d1d3fca1c7a3ef1f4d83f84caa" category="inline-link-macro">挂载云卷</block>
+  <block id="d669110a9e8449f0864298861b178caa" category="paragraph">然后继续 <block ref="c4f170bc2879d02b057f26156ec045e1" category="inline-link-macro-rx"></block>。</block>
+  <block id="f8a3e524010ba486ee8e4709993867f3" category="section-title">挂载云卷</block>
+  <block id="fcb03967ed8d3cc12a54c528f2e8f49d" category="paragraph">您可以将云卷挂载到 AWS 实例。云卷当前支持适用于 Linux 和 UNIX 客户端的 NFSv3 和 NFSv4.1 ，以及适用于 Windows 客户端的 SMB 3.0 和 3.1.1 。</block>
+  <block id="7d3e2b7307444071e2aff9ce902f88d2" category="paragraph">* 注意： * 请使用客户端支持的突出显示的协议 / 拨号。</block>
+  <block id="231483c3df5be28012c03a70cd182671" category="list-text">将鼠标悬停在卷上，然后单击 * 挂载卷 * 。</block>
+  <block id="c21e14f1dd8e5365a4df06cc5998a734" category="paragraph">NFS 和 SMB 卷会显示该协议的挂载说明。双协议卷提供两组指令。</block>
+  <block id="ca9ddaf06b48350fa016d22a546b3160" category="list-text">将鼠标悬停在命令上并将其复制到剪贴板，以简化此过程。只需在命令末尾添加目标目录 / 挂载点即可。</block>
+  <block id="f8b7bb7f28d1f1a0e9534f8d8582d615" category="paragraph">* NFS 示例： *</block>
+  <block id="b814517054080fc81ee838a94a37bc18" category="inline-image-macro">NFS 卷的挂载说明</block>
+  <block id="5c81aee2de731ff9fc139e1be671e308" category="paragraph"><block ref="5c81aee2de731ff9fc139e1be671e308" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="cb3bef40f931522adf1b31bfb5ba4e1b" category="paragraph">`rsize` 和 `wsize` 选项定义的最大 I/O 大小为 1048576 ，但对于大多数使用情形，建议使用的默认值为 65536 。</block>
+  <block id="14207f0f4970c30af3f3b09bc26475c1" category="paragraph">请注意，除非使用 `veRS=&lt;NFS_version&gt;` 选项指定版本，否则 Linux 客户端将默认使用 NFSv4.1 。</block>
+  <block id="c33a261ec68784a847d41ccecc103bc1" category="paragraph">* SMB 示例： *</block>
+  <block id="dd92d715112689203a9d21e0c4638b23" category="inline-image-macro">SMB 卷的挂载说明</block>
+  <block id="d837d9033dcef75be4b4e49cdbf1cd31" category="paragraph"><block ref="d837d9033dcef75be4b4e49cdbf1cd31" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="551922b0bc90cc1e1c104a41677df6f3" category="list-text">使用 SSH 或 RDP 客户端连接到 Amazon Elastic Compute Cloud （ EC2 ）实例，然后按照实例的挂载说明进行操作。</block>
+  <block id="48bdce5c154a8b0847bc13ad135c652b" category="paragraph">完成挂载说明中的步骤后，您已成功将云卷挂载到 AWS 实例。</block>
+  <block id="fb326b7d306e4c0117303049e48dfc52" category="section-title">管理现有卷</block>
+  <block id="83472337cbb57099afa660a35a9c3772" category="paragraph">您可以根据存储需求的变化管理现有卷。您可以查看，编辑，还原和删除卷。</block>
+  <block id="51c267e93c101971f1edda68c933c864" category="list-text">将鼠标悬停在卷上。</block>
+  <block id="f102d2437687d23a5ac4fb68ea34668f" category="inline-image-macro">卷悬停菜单的屏幕截图，可用于执行卷任务</block>
+  <block id="e71fbc93fc9f7a94de75291a1c6fa4d6" category="paragraph"><block ref="e71fbc93fc9f7a94de75291a1c6fa4d6" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="75ab567efb1db447b59b0343c1a2ceb3" category="list-text">管理卷：</block>
+  <block id="eaeb30f9f18e0c50b178676f3eaef45f" category="cell">任务</block>
+  <block id="004bf6c9a40003140292e97330236c53" category="cell">Action</block>
+  <block id="289d57ca7886b8016f08f4d17ad68a55" category="cell">查看有关卷的信息</block>
+  <block id="af7d09d8e320bd6a243e7e191eb7025d" category="cell">选择一个卷，然后单击 * 信息 * 。</block>
+  <block id="a262a83ffe24815a6e18b8655e7c9d3c" category="cell">编辑卷（包括快照策略）</block>
+  <block id="3a952a555dd0c4bc3d26bcf0d7fde45e" category="list-text">选择一个卷，然后单击 * 编辑 * 。</block>
+  <block id="13f2f059150e745212f31d522267cd21" category="list-text">修改卷的属性，然后单击 * 更新 * 。</block>
+  <block id="57ad6d7575a56679decf17fe96fcf1d0" category="cell">获取 nfs 或 smb mount 命令</block>
+  <block id="b30235cfafd0f4b2de1c94d4bbbc6944" category="list-text">选择一个卷，然后单击 * 挂载此卷 * 。</block>
+  <block id="8f636e3ecab79b837953c9b370f79329" category="list-text">单击 * 复制 * 以复制命令。</block>
+  <block id="7037507985b932c715517fcf78ae11e3" category="cell">按需创建 Snapshot 副本</block>
+  <block id="60e2cc66323270a764c3d126ddbdb292" category="list-text">选择一个卷，然后单击 * 创建 Snapshot 副本 * 。</block>
+  <block id="1dc03adea070e1afb3a901efa6fc6459" category="list-text">根据需要更改快照名称，然后单击 * 创建 * 。</block>
+  <block id="f8e9baca287188400b353f0fe39c789e" category="cell">将卷替换为 Snapshot 副本的内容</block>
+  <block id="1460f312bdf51a225580ddecc083cf19" category="list-text">选择一个卷，然后单击 * 将卷还原到 Snapshot* 。</block>
+  <block id="b287c286dfbb6ddb09f7af561118ea79" category="list-text">选择一个 Snapshot 副本，然后单击 * 还原 * 。</block>
+  <block id="7b364050ccd47e83ca87e25526786072" category="cell">删除 Snapshot 副本</block>
+  <block id="939b3653a783338bac814fa8c20d3b55" category="list-text">选择一个卷，然后单击 * 删除 Snapshot 副本 * 。</block>
+  <block id="9372fc1713f09255a76a27b66a7468f1" category="list-text">选择要删除的 Snapshot 副本，然后单击 * 删除 * 。</block>
+  <block id="a87e9e2d6f69725c3669d99fad70371d" category="list-text">再次单击 * 删除 * 进行确认。</block>
+  <block id="8e9a64bda9d21f945b6489df2e7946e1" category="cell">删除卷</block>
+  <block id="e7d176ac7539a52a08943f65ecc19e32" category="list-text">从所有客户端卸载卷：</block>
+  <block id="23394565644d9607267c2577190c4654" category="list-text">在 Linux 客户端上，使用 `umount` 命令。</block>
+  <block id="b70c71384dfeac0e536c343872f2fb55" category="list-text">在 Windows 客户端上，单击 * 断开网络驱动器 * 。</block>
+  <block id="150cd3111dfd7ae68aaeb429e7e50847" category="list-text">选择一个卷，然后单击 * 删除 * 。</block>
+  <block id="ea4e50481c541cefaed626458af5901f" category="section-title">从 Cloud Manager 中删除 Cloud Volumes Service</block>
+  <block id="88c64193c7e5ec6a5f60a502dd7e9683" category="paragraph">您可以从 Cloud Manager 中删除 Cloud Volumes Service for AWS 订阅以及所有现有卷。这些卷不会被删除，而是刚刚从 Cloud Manager 界面中删除。</block>
+  <block id="4abf73f2c32f00eced36eb72161883b5" category="inline-image-macro">选择从 Cloud Manager 中删除 Cloud Volumes Service 的选项的屏幕截图。</block>
+  <block id="18e6e6f0cefacc649ba2d5876a2ed691" category="paragraph"><block ref="18e6e6f0cefacc649ba2d5876a2ed691" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="c723db2b353490931b5febeb5b3ec637" category="list-text">单击 <block ref="a5c9b85c9e509567688aed8106bc419c" category="inline-image-macro-rx" type="image"></block> 按钮，然后单击 * 删除 Cloud Volumes Service * 。</block>
+  <block id="d6781b097f0c80fef5a0f286b314592a" category="list-text">在确认对话框中，单击 * 删除 * 。</block>
+  <block id="f30fc720797fd88aa8f663a5a819665b" category="section-title">管理 Active Directory 配置</block>
+  <block id="e18b6b0f318e9762e70aae7f12bb5804" category="paragraph">如果更改 DNS 服务器或 Active Directory 域，则需要在 Cloud Volumes Services 中修改 SMB 服务器，以便它可以继续为客户端提供存储。</block>
+  <block id="07afa1da28c4f6f41539c8ceee7f6417" category="paragraph">如果不再需要 Active Directory ，也可以删除它的链接。</block>
+  <block id="69911db82cd6ce5dc7c63d1b33420f3b" category="list-text">单击 <block ref="a5c9b85c9e509567688aed8106bc419c" category="inline-image-macro-rx" type="image"></block> 按钮，然后单击 * 管理 Active Directory* 。</block>
+  <block id="134ad6402428806a133702a811b06537" category="list-text">如果未配置 Active Directory ，则可以立即添加一个。如果配置了一个，则可以使用修改设置或将其删除 <block ref="a5c9b85c9e509567688aed8106bc419c" category="inline-image-macro-rx" type="image"></block> 按钮。</block>
+  <block id="cf4e123c6bdc4cb4eab7a7ea4adf62af" category="list-text">指定要加入的 Active Directory 的设置：</block>
+  <block id="c1ca298a9a9c76ca22ecf23ccaca6448" category="cell">为 SMB 服务器提供名称解析的 DNS 服务器的 IP 地址。引用多个服务器时，请使用逗号分隔 IP 地址，例如 172.31.25.223 ， 172.31.2.74 。</block>
+  <block id="4bc62575e91aa40d329c1383c7a4fc46" category="list-text">单击 * 保存 * 以保存设置。</block>
+  <block id="7ecb27295a94995c3226ee6a00e61dac" category="summary">Cloud Volumes Service for AWS 的成本取决于您选择的服务级别和已分配容量。选择适当的服务级别和容量有助于您以最低的成本满足存储需求。</block>
+  <block id="068b8cb31f226939d310dc3f1bff723c" category="doc">服务级别和分配的容量</block>
+  <block id="6979439f532107351636cd9fc8e5debe" category="paragraph">Cloud Volumes Service for AWS 的成本取决于您选择的 _service level_ 和 _allocated capacity_ 。选择适当的服务级别和容量有助于您以最低的成本满足存储需求。</block>
+  <block id="ea61e2c2ff507048203824add1eb7c21" category="section-title">注意事项</block>
+  <block id="e9e60dd401a5b937180118755b2c516f" category="paragraph">存储需求包括两个基本方面：</block>
+  <block id="fec28a2ae3528c66f53ebe76c854e92f" category="list-text">用于保存数据的 storage _capacity_</block>
+  <block id="9d7a4264a0f7f44695b988f88cdbf00d" category="list-text">用于与数据交互的 storage_bandwidth_</block>
+  <block id="38d12ff54e360686263308a96fd9217c" category="paragraph">如果您占用的存储空间超过为卷选择的容量，请考虑以下注意事项：</block>
+  <block id="9b177f3b5012cc7a7fdc682fc2988847" category="list-text">您将按服务级别定义的价格为所使用的额外存储容量付费。</block>
+  <block id="a24fb87327e01f9d972fcc8f148a8006" category="list-text">只有在增加分配的容量大小或更改服务级别后，卷可用的存储带宽才会增加。</block>
+  <block id="c6f45ce2284ef7f44c38a58ebbd013e0" category="section-title">服务级别</block>
+  <block id="421405600dbac51a8d526a6ba0b154c6" category="paragraph">Cloud Volumes Service for AWS 支持三种服务级别。您可以在创建或修改卷时指定服务级别。</block>
+  <block id="60bc680f6244fa7d54528486e2d2b04d" category="paragraph">服务级别可满足不同的存储容量和存储带宽需求：</block>
+  <block id="92a6e56b5e5d5f811a086aaa714742b2" category="list-text">* 标准 * （容量）</block>
+  <block id="8da6204306af19ccd70ab85e1c1f1029" category="paragraph">如果您希望以最低成本获得容量，并且带宽需求有限，则标准服务级别可能最适合您。例如，使用卷作为备份目标。</block>
+  <block id="3ac69ccfc6792ec21bd8ffab1dfb98c8" category="list-text">带宽：每 GB 配置容量 16 KB 的带宽</block>
+  <block id="be3cebf083f37aeffebd57d996548f8e" category="list-text">"* 高级版 " （容量和性能的平衡）</block>
+  <block id="fbac7022c702c9d12572dd615ef17a0d" category="paragraph">如果您的应用程序对存储容量和带宽的需求保持平衡，则高级服务级别可能最适合您。与标准服务级别相比，此级别的每 MB/ 秒成本更低，而且每 GB 存储容量的成本也比 Extreme 服务级别低。</block>
+  <block id="ba7e1ee82476be180981f31a6c955bb5" category="list-text">带宽：每 GB 配置容量 64 KB 的带宽</block>
+  <block id="ce14cf4662be2609e919850db18c8bc1" category="list-text">"* 至尊 " （性能）</block>
+  <block id="c70f7e92618aa18fbdfbb8f2931029d5" category="paragraph">就存储带宽而言， " 至高 " 服务级别成本最低。如果您的应用程序需要存储带宽而又不需要大量存储容量，则 Extreme 服务级别可能最适合您。</block>
+  <block id="69af2908469ea6cc3270e8598edb606c" category="list-text">带宽：每 GB 配置容量 128 KB 的带宽</block>
+  <block id="fba79ccafdb2717d0f2107ecca0bab16" category="section-title">已分配容量</block>
+  <block id="8be570b19c302676d406e242a338cc98" category="paragraph">您可以在创建或修改卷时为卷指定已分配的容量。</block>
+  <block id="6e7b7bcdf649d898ca61befdc7ebe633" category="paragraph">虽然您需要根据一般的高级业务需求选择服务级别，但您应根据应用程序的特定需求选择分配的容量大小，例如：</block>
+  <block id="7a514d592ea09e8cf39304fb5fd687ff" category="list-text">应用程序需要多少存储空间</block>
+  <block id="78c779a14fb92b89e0ba07d2d0a58e51" category="list-text">应用程序或用户每秒需要多少存储带宽</block>
+  <block id="cb606ae605bac0398d2f20e40cbbea63" category="paragraph">已分配容量以 GB 为单位指定。可以将卷的已分配容量设置为 100 GB 到 100 ， 000 GB （相当于 100 TB ）范围内。</block>
+  <block id="6f979818230d4e05c5e0e6a622be92fd" category="section-title">索引节点数</block>
+  <block id="4befc62c5b2a3509b19a274cdb519659" category="paragraph">小于或等于 1 TB 的卷最多可以使用 2 ， 000 万个索引节点。对于您分配的每个 TB ，索引节点数将增加 2000 万个，最多不超过 1 亿个索引节点。</block>
+  <block id="b5ad4a53f7910efad5e0b32480ac4644" category="list-text">\&lt;= 1 TB = 2 ， 000 万个索引节点</block>
+  <block id="9048dd5aaea9ea899eb5d3c504a388e4" category="list-text">大于 1 TB 到 2 TB = 4000 万个索引节点</block>
+  <block id="84e9ea4a8cb6dda1638be3c1085d4794" category="list-text">大于 2 TB 到 3 TB = 6000 万个索引节点</block>
+  <block id="fad0f1d113e957c55c7adaf192b41c90" category="list-text">&gt;3 TB 到 4 TB = 8000 万个索引节点</block>
+  <block id="968c9954af08101b6859a753070b5cfd" category="list-text">&gt;4 TB 到 100 TB = 1 亿个索引节点</block>
+  <block id="7d724e4bd163fe8323200b15500517f9" category="section-title">带宽</block>
+  <block id="7c710de840d663ce1b41ce18323e24d4" category="paragraph">您选择的服务级别和已分配容量的组合决定了卷的最大带宽。</block>
+  <block id="b6b860ad9bd23cc49cf7d156afff6df4" category="paragraph">如果您的应用程序或用户所需的带宽超过您选择的带宽，您可以更改服务级别或增加分配的容量。这些更改不会中断数据访问。</block>
+  <block id="d166390b76a18ea782161fb36dba3f2b" category="section-title">选择服务级别和分配的容量</block>
+  <block id="e175cfd89a253264b4cf1a5738f8c75f" category="paragraph">要根据您的需求选择最合适的服务级别和分配的容量，您需要了解在高峰或边缘需要多少容量和带宽。</block>
+  <block id="d0111659b6ad66f50a734e9fb839f909" category="section-title">服务级别和已分配容量的列表</block>
+  <block id="fdd35ba1f9baa581d209f9745d5e6886" category="paragraph">最左侧列表示容量，其他列则根据服务级别定义每个容量点的可用 MB/ 秒。</block>
+  <block id="8fb6421387c794bbfede3b93daf76791" category="inline-link-macro">合同订阅定价</block>
+  <block id="18db41dd22ae4ce50d9b559ad710c80e" category="inline-link-macro">按计量的订阅定价</block>
+  <block id="709437fd87f14fefdd0d44b61fe6825c" category="paragraph">请参见 <block ref="21674e06edf418cd4a76600da19abac6" category="inline-link-macro-rx"></block> 和 <block ref="bd01cd94b71e02c31aec3cfa581aa95c" category="inline-link-macro-rx"></block> 有关定价的完整详细信息。</block>
+  <block id="b20b7ada5b0022cbdfccc7272aaac5ef" category="cell">容量（ TB ）</block>
+  <block id="fa470739a3bd28709c54fe307058aa34" category="cell">标准（ MB/ 秒）</block>
+  <block id="c09dd8571e479fa8e5a5a58bf8fc321a" category="cell">高级（ MB/ 秒）</block>
+  <block id="eec8976d0e40b86dc97c0eadd7583ca3" category="cell">至高（ MB/ 秒）</block>
+  <block id="d30afcce0a79de2f0b4b40521ccf9d80" category="cell">0.1 （ 100 GB ）</block>
+  <block id="4341447b6ad78bf4d7eb59ebb5a53d63" category="cell">1.6</block>
+  <block id="ded681fc154529ebbc7562fb0c73ba47" category="cell">6.4</block>
+  <block id="e76af95319f03251bdf6c3771f39afbe" category="cell">12.8</block>
+  <block id="c4ca4238a0b923820dcc509a6f75849b" category="cell">1.</block>
+  <block id="c74d97b01eae257e44aa9d5bade97baf" category="cell">16.</block>
+  <block id="ea5d2f1c4608232e07d3aa3d998e5135" category="cell">64</block>
+  <block id="76dc611d6ebaafc66cc0879c71b5db5c" category="cell">128.</block>
+  <block id="c81e728d9d4c2f636f067f89cc14862c" category="cell">2.</block>
+  <block id="6364d3f0f495b6ab9dcf8d3b5c6e0b01" category="cell">32</block>
+  <block id="f718499c1c8cef6730f9fd03c8125cab" category="cell">256</block>
+  <block id="eccbc87e4b5ce2fe28308fd9f2a7baf3" category="cell">3.</block>
+  <block id="642e92efb79421734881b53e1e1b18b6" category="cell">48</block>
+  <block id="58a2fc6ed39fd083f55d4182bf88826d" category="cell">192.</block>
+  <block id="0584ce565c824b7b7f50282d9a19945b" category="cell">384</block>
+  <block id="a87ff679a2f3e71d9181a67b7542122c" category="cell">4.</block>
+  <block id="10a7cdd970fe135cf4f7bb55c0e3b59f" category="cell">512</block>
+  <block id="e4da3b7fbbce2345d7772b0674a318d5" category="cell">5.</block>
+  <block id="f033ab37c30201f73f142449d037028d" category="cell">80</block>
+  <block id="320722549d1751cf3f247855f937b982" category="cell">320</block>
+  <block id="4ffce04d92a4d6cb21c1494cdfcd6dc1" category="cell">640</block>
+  <block id="1679091c5a880faf6fb5e6087eb1b2dc" category="cell">6.</block>
+  <block id="26657d5ff9020d2abefe558796b99584" category="cell">96</block>
+  <block id="3a835d3215755c435ef4fe9965a3f2a0" category="cell">768</block>
+  <block id="8f14e45fceea167a5a36dedd4bea2543" category="cell">7.</block>
+  <block id="7f6ffaa6bb0b408017b62254211691b5" category="cell">112</block>
+  <block id="9b70e8fe62e40c570a322f1b0b659098" category="cell">448</block>
+  <block id="061412e4a03c02f9902576ec55ebbe77" category="cell">896</block>
+  <block id="c9f0f895fb98ab9159f51fd0297e236d" category="cell">8.</block>
+  <block id="a980f22074119d4103953f70f2fd69ce" category="cell">1,024</block>
+  <block id="45c48cce2e2d7fbdea1afc51c7c6ad26" category="cell">9</block>
+  <block id="0a09c8844ba8f0936c20bd791130d6b6" category="cell">144.</block>
+  <block id="a7aeed74714116f3b292a982238f83d2" category="cell">576</block>
+  <block id="a2ec7ea68d10c1832eb7bc24417b4c73" category="cell">1,152</block>
+  <block id="d3d9446802a44259755d38e6d163e820" category="cell">10</block>
+  <block id="b73ce398c39f506af761d2277d853a92" category="cell">160</block>
+  <block id="d074a76497ac7c9cf90be2933f171e07" category="cell">1,280</block>
+  <block id="6512bd43d9caa6e02c990b0a82652dca" category="cell">11.</block>
+  <block id="38af86134b65d0f10fe33d30dd76442e" category="cell">176.</block>
+  <block id="f64eac11f2cd8f0efa196f8ad173178e" category="cell">704-</block>
+  <block id="b5433fb6d3b738bfc5bf19637b8c12a0" category="cell">1,408</block>
+  <block id="c20ad4d76fe97759aa27a0c99bff6710" category="cell">12</block>
+  <block id="d969ae360b7ff6fa704401ecb7d4424d" category="cell">1,536</block>
+  <block id="c51ce410c124a10e0db5e4b97fc2af39" category="cell">13</block>
+  <block id="091d584fced301b442654dd8c23b3fc9" category="cell">208.</block>
+  <block id="7250eb93b3c18cc9daa29cf58af7a004" category="cell">832</block>
+  <block id="ca17fb4ccf34589606ea20f51fb67572" category="cell">1,664</block>
+  <block id="aab3238922bcc25a6f606eb525ffdc56" category="cell">14</block>
+  <block id="13fe9d84310e77f13a6d184dbf1232f3" category="cell">224</block>
+  <block id="51f8a71bd595aee58a4d31fcc5b7251e" category="cell">1,792</block>
+  <block id="9bf31c7ff062936a96d3c8bd1f8f2ff3" category="cell">15</block>
+  <block id="335f5352088d7d9bf74191e006d8e24c" category="cell">240</block>
+  <block id="437d7d1d97917cd627a34a6a0fb41136" category="cell">960</block>
+  <block id="c9ce3b8b108f8145e2fc3eb7064c3516" category="cell">1,920</block>
+  <block id="4546199e2bcb9ae49a13edef9675fd03" category="cell">2 ， 048</block>
+  <block id="70efdf2ec9b086079795c442636b55fb" category="cell">17</block>
+  <block id="7a614fd06c325499f1680b9896beedeb" category="cell">272</block>
+  <block id="857a14696a060a6cd2faa38c7b476305" category="cell">1,088</block>
+  <block id="408fef2b76c44f4ca6fb5c74b192b429" category="cell">2 ， 176</block>
+  <block id="6f4922f45568161a8cdf4ad2299f6d23" category="cell">18</block>
+  <block id="48aedb8880cab8c45637abc7493ecddd" category="cell">288</block>
+  <block id="1ced3beb6929d932c52fd501ac7ef9c2" category="cell">2 ， 304</block>
+  <block id="1f0e3dad99908345f7439f8ffabdffc4" category="cell">19</block>
+  <block id="37bc2f75bf1bcfe8450a1a41c200364c" category="cell">304.</block>
+  <block id="32ad3356163eab16620a49733767a241" category="cell">1,216</block>
+  <block id="85862250c8d12522fa16feede37b89ae" category="cell">2 ， 432</block>
+  <block id="98f13708210194c475687be6106a3b84" category="cell">20</block>
+  <block id="2372fbbe5b31f0a06ff46aae4e94d156" category="cell">2 ， 560</block>
+  <block id="3c59dc048e8850243be8079a5c74d079" category="cell">21</block>
+  <block id="6855456e2fe46a9d49d3d3af4f57443d" category="cell">336-336-</block>
+  <block id="bfacb0cda62d58861198f46c8f59999d" category="cell">1,344</block>
+  <block id="e586434102dc24b1e7c7dd19995d8ba2" category="cell">2 ， 688</block>
+  <block id="b6d767d2f8ed5d21a44b0e5886680cb9" category="cell">22.</block>
+  <block id="371bce7dc83817b7893bcdeed13799b5" category="cell">352-</block>
+  <block id="5d172485a2518083f572ac0c7b774a8d" category="cell">2 ， 716</block>
+  <block id="37693cfc748049e45d87b8c7d8b9aacd" category="cell">23</block>
+  <block id="cf004fdc76fa1a4f25f62e0eb5261ca3" category="cell">368</block>
+  <block id="3299f7267db8fe9f13dc0b68a8ebcc66" category="cell">1,472</block>
+  <block id="2e7b19fc245c368ab19620107880cd28" category="cell">2944</block>
+  <block id="1ff1de774005f8da13f42943881c655f" category="cell">24</block>
+  <block id="6b4f9c381e764df5528ccd7edfbfbc0e" category="cell">3,072</block>
+  <block id="8e296a067a37563370ded05f5a3bf3ec" category="cell">25.</block>
+  <block id="18d8042386b79e2c279fd162df0205c8" category="cell">400</block>
+  <block id="9f62f1974f653574a79b51175c6f815a" category="cell">1,600</block>
+  <block id="9b27a8f7b7b1e02d20f94ccd0f705c81" category="cell">3,200</block>
+  <block id="4e732ced3463d06de0ca9a15b6153677" category="cell">26</block>
+  <block id="8fe0093bb30d6f8c31474bd0764e6ac0" category="cell">416</block>
+  <block id="03798723555b0ede4dde0e36f0728fcd" category="cell">3,328</block>
+  <block id="02e74f10e0327ad868d138f2b4fdd6f0" category="cell">27</block>
+  <block id="248e844336797ec98478f85e7626de4a" category="cell">432-432</block>
+  <block id="438af5a7df39d4656ece3cd1c1499b0f" category="cell">1,728</block>
+  <block id="6f5b269f08bebe3bf5aa67d20c8a1982" category="cell">3,456</block>
+  <block id="33e75ff09dd601bbe69f351039152189" category="cell">28</block>
+  <block id="9a003cffecc0e8671073944fd9257b22" category="cell">3,584</block>
+  <block id="6ea9ab1baa0efb9e19094440c317e21b" category="cell">29</block>
+  <block id="c2a2f0121b38748f2ea78a331b2bb22c" category="cell">1,856</block>
+  <block id="cfd5cf9297bab50b5bad09036e9e0dc3" category="cell">3,712</block>
+  <block id="34173cb38f07f89ddbebc2ac9128303f" category="cell">30 个</block>
+  <block id="6ea2ef7311b482724a9b7b0bc0dd85c6" category="cell">480</block>
+  <block id="eebe33fdc6823a44adbcad8ecf8b68c1" category="cell">3,840</block>
+  <block id="c16a5320fa475530d9583c34fd356ef5" category="cell">31</block>
+  <block id="b534ba68236ba543ae44b22bd110a1d6" category="cell">496.</block>
+  <block id="ae3945f38f605859bc5371bf14b18ac9" category="cell">1,984</block>
+  <block id="1f0c0806adc2bddfe63d7d7379aea76d" category="cell">3,968</block>
+  <block id="c9ca1ec49e8aac1615059e421cbb4793" category="cell">4,096</block>
+  <block id="182be0c5cdcd5072bb1864cdee4d3d6e" category="cell">33</block>
+  <block id="f4be00279ee2e0a53eafdaa94a151e2c" category="cell">528</block>
+  <block id="4eabed92a3b9b17a9e978ae065374304" category="cell">2 ， 112</block>
+  <block id="0f6e26643fab7063e44bbb4a11e2340e" category="cell">4,224</block>
+  <block id="e369853df766fa44e1ed0ff613f563bd" category="cell">34</block>
+  <block id="97e8527feaf77a97fc38f34216141515" category="cell">5444</block>
+  <block id="e2cdf56d6e1982c6471048ba70156221" category="cell">4,352</block>
+  <block id="1c383cd30b7c298ab50293adfecb7b18" category="cell">35</block>
+  <block id="a9a6653e48976138166de32772b1bf40" category="cell">560</block>
+  <block id="be186c804064fc0b6325f6b5f3bd64ab" category="cell">2,240</block>
+  <block id="876272968baa90d7368e3b1a6672dbcf" category="cell">4,480</block>
+  <block id="19ca14e7ea6328a42e0eb13d585e4c22" category="cell">36</block>
+  <block id="c7a406813eceb19ae792b1eb5cb3c9f2" category="cell">4,500</block>
+  <block id="a5bfc9e07964f8dddeb95fc584cd965d" category="cell">37</block>
+  <block id="dbe272bab69f8e13f14b405e038deb64" category="cell">592</block>
+  <block id="95f3d05f7452cc80901a5c4e9350d15c" category="cell">2 ， 368</block>
+  <block id="a5771bce93e200c36f7cd9dfd0e5deaa" category="cell">38</block>
+  <block id="996a7fa078cc36c46d02f9af3bef918b" category="cell">608</block>
+  <block id="d67d8ab4f4c10bf22aa353e27879133c" category="cell">39</block>
+  <block id="48ab2f9b45957ab574cf005eb8a76760" category="cell">624</block>
+  <block id="a49d5fec73f3733f1991638259163bb4" category="cell">2 ， 496</block>
+  <block id="d645920e395fedad7bbbed0eca3fe2e0" category="cell">40</block>
+  <block id="3416a75f4cea9109507cacd8e2f2aefc" category="cell">41.</block>
+  <block id="26408ffa703a72e8ac0117e74ad46f33" category="cell">656.</block>
+  <block id="748ec101eac6bc8826c843ea0e3e8e30" category="cell">2 ， 624</block>
+  <block id="a1d0c6e83f027327d8461063f4ac58a6" category="cell">42</block>
+  <block id="2dea61eed4bceec564a00115c4d21334" category="cell">672</block>
+  <block id="17e62166fc8586dfa4d1bc0e1742c08b" category="cell">43</block>
+  <block id="f79921bbae40a577928b76d2fc3edc2a" category="cell">688</block>
+  <block id="fa064943223d179f779ba445cdcbe40b" category="cell">2 ， 752</block>
+  <block id="f7177163c833dff4b38fc8d2872f1ec6" category="cell">44</block>
+  <block id="6c8349cc7260ae62e3b1396831a8398f" category="cell">45</block>
+  <block id="5f2c22cb4a5380af7ca75622a6426917" category="cell">720-20</block>
+  <block id="8dbe5468ca4a7bd73018d84ae2927c88" category="cell">2 ， 880</block>
+  <block id="d9d4f495e875a2e075a1a4a6e1b9770f" category="cell">46</block>
+  <block id="6bc24fc1ab650b25b4114e93a98f1eba" category="cell">736</block>
+  <block id="67c6a1e7ce56d3d6fa748ab6d9af3fd7" category="cell">47</block>
+  <block id="a1d33d0dfec820b41b54430b50e96b5c" category="cell">752</block>
+  <block id="d1b624f9e54d26f767a5c6b47d9b8bd1" category="cell">3,008</block>
+  <block id="f457c545a9ded88f18ecee47145a72c0" category="cell">49</block>
+  <block id="fc8001f834f6a5f0561080d134d53d29" category="cell">784</block>
+  <block id="206dd327ff78959436387abeb90993b4" category="cell">3,136</block>
+  <block id="c0c7c76d30bd3dcaefc96f40275bdc0a" category="cell">50</block>
+  <block id="7a53928fa4dd31e82c6ef826f341daec" category="cell">800</block>
+  <block id="2838023a778dfaecdc212708f721b788" category="cell">51</block>
+  <block id="43fa7f58b7eac7ac872209342e62e8f1" category="cell">816</block>
+  <block id="6b3910c5f8852c3c30def4f020546d57" category="cell">3,264</block>
+  <block id="9a1158154dfa42caddbd0694a4e9bdc8" category="cell">52</block>
+  <block id="362e80d4df43b03ae6d3f8540cd63626" category="cell">848</block>
+  <block id="46a5c57c26aa123579e97dcaadbc7c18" category="cell">3,392</block>
+  <block id="a684eceee76fc522773286a895bc8436" category="cell">54</block>
+  <block id="1fc214004c9481e4c8073e85323bfd4b" category="cell">8664</block>
+  <block id="b53b3a3d6ab90ce0268229151c9bde11" category="cell">55</block>
+  <block id="1f50893f80d6830d62765ffad7721742" category="cell">880</block>
+  <block id="7a4a23bb30197f2a80c076cb01b2fa05" category="cell">3,520</block>
+  <block id="9f61408e3afb633e50cdf1b20de6f466" category="cell">56</block>
+  <block id="72b32a1f754ba1c09b3695e0cb6cde7f" category="cell">57</block>
+  <block id="2a9d121cd9c3a1832bb6d2cc6bd7a8a7" category="cell">912</block>
+  <block id="1cd253a16c59c151a850058a2fb45048" category="cell">3,648</block>
+  <block id="66f041e16a60928b05a7e228a89c3799" category="cell">58</block>
+  <block id="d045c59a90d7587d8d671b5f5aec4e7c" category="cell">928</block>
+  <block id="093f65e080a295f8076b1c5722a46aa2" category="cell">59</block>
+  <block id="64223ccf70bbb65a3a4aceac37e21016" category="cell">944</block>
+  <block id="085de5f9b74520ffc33f61eee5ceccb5" category="cell">3,776</block>
+  <block id="072b030ba126b2f4b2374f342be9ed44" category="cell">60</block>
+  <block id="7f39f8317fbdb1988ef4c628eba02591" category="cell">61.</block>
+  <block id="9c01802ddb981e6bcfbec0f0516b8e35" category="cell">976</block>
+  <block id="3940498a028fde51f06fa4cde9e50415" category="cell">3,904</block>
+  <block id="44f683a84163b3523afe57c2e008bc8c" category="cell">62.</block>
+  <block id="860320be12a1c050cd7731794e231bd3" category="cell">992</block>
+  <block id="03afdbd66e7929b125f8597834fa83a4" category="cell">63.</block>
+  <block id="a05e4b899cf743ddd918378a76eac8e9" category="cell">1,008</block>
+  <block id="9e4b5af50e6a366d8d86df8387c3a565" category="cell">4,032</block>
+  <block id="fc490ca45c00b1249bbe3554a4fdf6fb" category="cell">65</block>
+  <block id="509ac89bed3b5145496da59f08c40d6d" category="cell">1,040</block>
+  <block id="cd3ed66a43a07436c3ad4004455146fa" category="cell">4,160</block>
+  <block id="3295c76acbf4caaed33c36b1b5fc2cb1" category="cell">66</block>
+  <block id="025feabccb15b838c0aa44d506a0c9d6" category="cell">1,056</block>
+  <block id="735b90b4568125ed6c3f678819b6e058" category="cell">67</block>
+  <block id="f41e86d0228dc7e98791219608c15e1a" category="cell">1,072</block>
+  <block id="e12dc67763b9a83e57fbdefec9c34fbe" category="cell">4,288</block>
+  <block id="a3f390d88e4c41f2747bfa2f1b5f87db" category="cell">68</block>
+  <block id="14bfa6bb14875e45bba028a21ed38046" category="cell">69</block>
+  <block id="2edf192feb13fed040b98437b7c33fe4" category="cell">1,104</block>
+  <block id="f68705e07feef5698cad56559f238036" category="cell">4,416</block>
+  <block id="7cbbc409ec990f19c78c75bd1e06f215" category="cell">70</block>
+  <block id="5048b05ed2c0a5c28962ee489c5735ba" category="cell">1,120</block>
+  <block id="e2c420d928d4bf8ce0ff2ec19b371514" category="cell">71.</block>
+  <block id="2bdfdb04330a310f641722ad9b91da04" category="cell">1,136</block>
+  <block id="32bb90e8976aab5298d5da10fe66f21d" category="cell">72.</block>
+  <block id="d2ddea18f00665ce8623e36bd4e3c7c5" category="cell">73.</block>
+  <block id="69a206ef4a9fe2be7093b3a6a9860cc7" category="cell">1,168</block>
+  <block id="ad61ab143223efbc24c7d2583be69251" category="cell">74.</block>
+  <block id="0d5f5715f3dd10192b0cf94a13a19a4b" category="cell">1,184</block>
+  <block id="d09bf41544a3365a46c9077ebb5e35c3" category="cell">75</block>
+  <block id="bc82c542d7228d85b06c977c78cb3f48" category="cell">1,200</block>
+  <block id="fbd7939d674997cdb4692d34de8633c4" category="cell">76.</block>
+  <block id="28dd2c7955ce926456240b2ff0100bde" category="cell">77</block>
+  <block id="b53361efb8d974b1650dacdf8cfb7ea1" category="cell">1,232</block>
+  <block id="35f4a8d465e6e1edc05f3d8ab658c551" category="cell">78</block>
+  <block id="f9259e8f14e952df0f8855dbf5281085" category="cell">1,248</block>
+  <block id="d1fe173d08e959397adf34b1d77e88d7" category="cell">79.</block>
+  <block id="68c5694ab439f927c54dd6e31d93556b" category="cell">1,264</block>
+  <block id="43ec517d68b6edd3015b3edc9a11367b" category="cell">81.</block>
+  <block id="7d42f60239bc3d3efa15de0f608f56e1" category="cell">1,296</block>
+  <block id="9778d5d219c5080b9a6a17bef029331c" category="cell">82.</block>
+  <block id="eba2f9ba8a8dad26362a4a3fe2eb174f" category="cell">1,312</block>
+  <block id="fe9fc289c3ff0af142b6d3bead98a923" category="cell">83.</block>
+  <block id="ff0b19b22f8d89f3584367a37d312d87" category="cell">1,328</block>
+  <block id="68d30a9594728bc39aa24be94b319d21" category="cell">84.</block>
+  <block id="3ef815416f775098fe977004015c6193" category="cell">85.</block>
+  <block id="9348df72c44b30c92f21c45bf60c134a" category="cell">1,360</block>
+  <block id="93db85ed909c13838ff95ccfa94cebd9" category="cell">86</block>
+  <block id="9174cb2ab6b0e84a25d9860c030731c8" category="cell">1,376</block>
+  <block id="c7e1249ffc03eb9ded908c236bd1996d" category="cell">87</block>
+  <block id="77d42bfaff62ddcf6cc3aae13aa0cc6e" category="cell">1,392</block>
+  <block id="7647966b7343c29048673252e490f736" category="cell">89.</block>
+  <block id="27014f48b87d72edd8a665f08e889d5f" category="cell">1,424</block>
+  <block id="8613985ec49eb8f757ae6439e879bb2a" category="cell">90</block>
+  <block id="5533cffca7ce34e5c108e9bf7f72fbb0" category="cell">1,440</block>
+  <block id="54229abfcfa5649e7003b83dd4755294" category="cell">91.</block>
+  <block id="4a978f81d22037721b213fb8408f6472" category="cell">1,456</block>
+  <block id="92cc227532d17e56e07902b254dfad10" category="cell">92.</block>
+  <block id="98dce83da57b0395e163467c9dae521b" category="cell">93</block>
+  <block id="b83f104e5c1f891a958af843fec85b56" category="cell">1,488</block>
+  <block id="f4b9ec30ad9f68f89b29639786cb62ef" category="cell">94.</block>
+  <block id="197037d3aa278839fd3e8ba3e6ff29fb" category="cell">1,504</block>
+  <block id="812b4ba287f5ee0bc9d43bbf5bbe87fb" category="cell">95</block>
+  <block id="e5a0bd6a23e4860bd04bbc6da5a2a010" category="cell">1,520</block>
+  <block id="e2ef524fbf3d9fe611d5a8e90fefdc9c" category="cell">97</block>
+  <block id="363f8c34a0b6c80a00e0b12482cf3455" category="cell">1,552</block>
+  <block id="ed3d2c21991e3bef5e069713af9fa6ca" category="cell">98</block>
+  <block id="7168998a626bd21d89aab5103a9a2c22" category="cell">1,568</block>
+  <block id="ac627ab1ccbdb62ec96e702f07f6425b" category="cell">99</block>
+  <block id="5d3ad0ff825f78b6dda0692f7d7c67bc" category="cell">1,584</block>
+  <block id="f899139df5e1059396431415e770c6dd" category="cell">100</block>
+  <block id="5504977cb47d642da3d1264eefb7edda" category="section-title">示例 1</block>
+  <block id="d045d6be14ea6ece270bf5a693420dcc" category="paragraph">例如，您的应用程序需要 25 TB 的容量和 100 MB/ 秒的带宽。如果容量为 25 TB ，则标准服务级别将提供 400 MB/ 秒的带宽，成本为 2 ， 500 美元（估计值：请参见当前定价），从而使标准服务级别成为此情况下最合适的服务级别。</block>
+  <block id="96eade91ea8ad3a768b45fae66e4a317" category="inline-image-macro">服务级别和容量选择，示例 1</block>
+  <block id="fa1e629ff9f8ba28a5b87f520d0f978b" category="paragraph"><block ref="fa1e629ff9f8ba28a5b87f520d0f978b" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="5f3a8aa007370d00f3fd3b293a6a1118" category="section-title">示例 2.</block>
+  <block id="7d4339c2a666cceff7075f651f077e99" category="paragraph">例如，您的应用程序需要 12 TB 的容量和 800 MB/ 秒的峰值带宽。尽管极速服务级别可以满足 12 TB 以上的应用程序需求，但在高级服务级别选择 13 TB 更经济高效（估计：请参见当前定价）。</block>
+  <block id="47d1178d43da1c44b8c4b656a839d0b9" category="inline-image-macro">服务级别和容量选择，示例 2</block>
+  <block id="fdd6098304bebbe4ab182205872c90df" category="paragraph"><block ref="fdd6098304bebbe4ab182205872c90df" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1133ee04cdffe85874a6583340df817d" category="summary">NetApp Cloud Volumes Service for AWS 是一种云原生文件服务，可通过 NFS 和 SMB 提供 NAS 卷，并提供全闪存性能。本文档介绍如何使用 NetApp Cloud Manager 管理 Cloud Volumes Service for AWS 。</block>
+  <block id="0f707acb7e2394436734d74b239bd7a4" category="doc">Cloud Volumes Service for AWS 文档</block>
+  <block id="3c10116b37b407ac79092a38ffb292e4" category="summary">在向 NetApp 技术支持创建支持案例之前，您需要先将 NetApp 支持站点帐户添加到 Cloud Manager 中，然后注册获取支持。</block>
+  <block id="42748df9eaa0be17ddc5cc1593cf57ab" category="doc">注册以获得支持</block>
+  <block id="d53e2559d6ace0e907fc57192bf286b6" category="paragraph"><block ref="d53e2559d6ace0e907fc57192bf286b6" category="inline-link-macro-rx"></block></block>
+  <block id="7ff191df90fac0fa94ab5c2b5101a5e9" category="sidebar">所有 Cloud Manager 文档</block>
+  <block id="b454c4191e92c73442889214b58f36be" category="sidebar">Cloud Volumes Service for AWS 文档</block>
+  <block id="7d0ee6fed10d3d4e5c9ee496729ab519" category="sidebar">发行说明</block>
+  <block id="be11c74c1dd7f307bb80183a90dc2067" category="sidebar">入门</block>
+  <block id="2a6b62203da55d418c8d3f55db46fd03" category="sidebar">使用适用于 AWS 的 Cloud Volumes Service</block>
+  <block id="5a118d01c740f85c0a2216350cef40eb" category="sidebar">部署和管理云卷</block>
+  <block id="0460583622f03a52d7693094d6fa2452" category="sidebar">概念</block>
+  <block id="0adc03eac86772ad2c75c8f140be417e" category="sidebar">知识和支持</block>
+  <block id="5fef629b836b60819e0c0ce49cd2b9d7" category="sidebar">新增功能</block>
+  <block id="9038e7cfcfe9bb9df9afd31371070be8" category="sidebar">管理现有卷</block>
+  <block id="813011e2103649bb71f124adedcc10ea" category="sidebar">博客社区</block>
+  <block id="dd490b81914dd945601e442a41cb4222" category="sidebar">NetApp 社区</block>
+  <block id="ff6c37cbc252e306a6b4e390ec13cbc1" category="sidebar">Cloud Central 博客</block>
+  <block id="ad203e818e0c9d7f42f1c260b33875f3" category="sidebar">云网络研讨会</block>
+</blocks>
