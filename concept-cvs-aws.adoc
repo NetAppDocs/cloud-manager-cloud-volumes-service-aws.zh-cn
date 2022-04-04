@@ -16,7 +16,7 @@ summary: NetApp Cloud Volumes Service for AWS 是一种云原生文件服务，�
 NetApp Cloud Volumes Service for AWS 是一种云原生文件服务，可通过 NFS 和 SMB 提供具有全闪存性能的 NAS 卷。此服务支持在 AWS 云中运行任何工作负载，包括原有应用程序。
 
 
-NOTE: 启动时 link:https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html["适用于 ONTAP 的 Amazon FSX"^]，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 CVS 。但是，如果您之前已将适用于 AWS 的 CVS 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。
+NOTE: 启动时 link:https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html["适用于 ONTAP 的 Amazon FSX"^]，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 Cloud Volumes Service 。但是，如果您之前已将适用于 AWS 的 Cloud Volumes Service 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。
 
 
 

@@ -76,10 +76,7 @@
   <block id="69c870ef5a9fde9a9c627d8c46f1737a" category="paragraph"><block ref="69c870ef5a9fde9a9c627d8c46f1737a" category="inline-image-macro-rx" type="image"></block></block>
   <block id="a696ff8c895f6eed266509c3ab2452a9" category="summary">了解 Cloud Volumes Service for AWS 中的新增功能。</block>
   <block id="780371a55c5f8fb4b8ad9c591f1ca785" category="doc">Cloud Volumes Service for AWS 的新增功能</block>
-  <block id="3b7a1a77cdd08778e0827fbf312442b7" category="section-title">2021 年 9 月 2 日</block>
-  <block id="b8a465f604dc28087d04a8998f16d610" category="section-title">无法为 AWS 工作环境创建新的 CVS 。</block>
   <block id="18cf072964a583150dd247485ba75b92" category="inline-link-macro">适用于 ONTAP 的 Amazon FSX</block>
-  <block id="2fe1ae66d2802d30c5480c17cf6781f4" category="paragraph">启动时 <block ref="f5299bffecc7e118b61541de961fc5aa" category="inline-link-macro-rx"></block>，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 CVS 。但是，如果您之前已将适用于 AWS 的 CVS 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。</block>
   <block id="ce21e7ae4271271294ccbf54c8fd6864" category="summary">NetApp 通过多种方式为 Cloud Manager 提供支持。全天候提供丰富的免费自助支持选项，例如知识库（ KB ）文章和社区论坛。您的支持注册包括通过 Web 服务单提供的远程技术支持。</block>
   <block id="fabfc25ef8996fd90836e58a4c0b26b6" category="doc">获取帮助</block>
   <block id="d41d8cd98f00b204e9800998ecf8427e" category="inline-link-macro"></block>
@@ -578,4 +575,8 @@
   <block id="dd490b81914dd945601e442a41cb4222" category="sidebar">NetApp 社区</block>
   <block id="ff6c37cbc252e306a6b4e390ec13cbc1" category="sidebar">Cloud Central 博客</block>
   <block id="ad203e818e0c9d7f42f1c260b33875f3" category="sidebar">云网络研讨会</block>
+  <block id="d798cbf5a08fbeb9fdd3652e5b00bb4c" category="section-title">2021 年 9 月 2 日</block>
+  <block id="5690692f09ed4eae80e2f6b0bcaddd11" category="section-title">无法为 AWS 工作环境创建新的 Cloud Volumes Service 。</block>
+  <block id="7bc918c632f0c5dfc839f6245b289949" category="paragraph">启动时 <block ref="f5299bffecc7e118b61541de961fc5aa" category="inline-link-macro-rx"></block>，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 Cloud Volumes Service 。但是，如果您之前已将适用于 AWS 的 Cloud Volumes Service 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。</block>
+  <block id="8184a02e5fd636ada7ac9c7887ab7063" category="admonition">启动时 <block ref="96821e1e659978c978732a5dc24298ac" category="inline-link-macro-rx"></block>，您不能再在 Cloud Manager 中为 AWS 工作环境创建新的 Cloud Volumes Service 。但是，如果您之前已将适用于 AWS 的 Cloud Volumes Service 工作环境添加到 Cloud Manager 中，则可以继续创建和管理卷。</block>
 </blocks>
