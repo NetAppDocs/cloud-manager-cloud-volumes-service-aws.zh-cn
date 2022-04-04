@@ -7,6 +7,7 @@ summary: NetApp Cloud Volumes Service for AWS 是一种云原生文件服务，�
 ---
 = Cloud Volumes Service for AWS 文档
 :hardbreaks:
+:allow-uri-read: 
 :nofooter: 
 :icons: font
 :linkattrs: 

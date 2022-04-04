@@ -6,6 +6,7 @@ summary: Cloud Volumes Service for AWS 的成本取决于您选择的服务级�
 ---
 = 服务级别和分配的容量
 :hardbreaks:
+:allow-uri-read: 
 :nofooter: 
 :icons: font
 :linkattrs: 
